@@ -8,6 +8,8 @@ const methodOverride = require("method-override");
 const ExpressError = require("./utils/ExpressError.js");
 const wrapAsync = require("./utils/wrapAsync.js");
 
+const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || "mongodb://127.0.0.1:27017/UrDes";
+
 // Global error handlers
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Rejection:", err.message);
@@ -96,7 +98,7 @@ app.use((err, req, res, next) =>{
 
 async function main(){
     try {
-        await mongoose.connect("mongodb://127.0.0.1:27017/UrDes");
+        await mongoose.connect(MONGO_URI);
         console.log("Connected to MongoDB");
     } catch (err) {
         console.error("Failed to connect to MongoDB:", err.message);

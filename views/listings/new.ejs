@@ -1,0 +1,41 @@
+<% layout('layouts/boilerplate') %>
+<div class="form-panel">
+    <h2 class="page-title">Add the details of your new listing</h2>
+    <form action="/listings" method="POST" class="needs-validation" novalidate>
+        <div>
+            <label class="form-label" for="listing-title">Title</label>
+            <input id="listing-title" type="text" name="listing[title]" class="form-control" required>
+            <div class="valid-feedback">Great Title</div>
+            <div class="invalid-feedback">Please enter the Title Name</div>
+        </div>
+        <div>
+            <label class="form-label" for="listing-description">Description</label>
+            <input id="listing-description" type="text" name="listing[description]" class="form-control" required>
+            <div class="valid-feedback">Nice Description</div>
+            <div class="invalid-feedback">Please enter the Description</div>
+        </div>
+        <div>
+            <label class="form-label" for="listing-price">Price</label>
+            <input id="listing-price" type="number" name="listing[price]" class="form-control" required>
+            <div class="invalid-feedback">Kindly enter the Price</div>
+        </div>
+        <div>
+            <label class="form-label" for="listing-location">Location</label>
+            <input id="listing-location" type="text" name="listing[location]" class="form-control" required>
+            <div class="valid-feedback">Wonderful Location</div>
+            <div class="invalid-feedback">Please enter the Location</div>
+        </div>
+        <div>
+            <label class="form-label" for="listing-image">Image URL</label>
+            <input id="listing-image" type="text" name="listing[image]" class="form-control" placeholder="https://...">
+        </div>
+        <div class="invalid-feedback">Please enter the Image URL</div>
+        <div>
+            <label class="form-label" for="listing-country">Country</label>
+            <input id="listing-country" type="text" name="listing[country]" class="form-control" required>
+            <div class="valid-feedback">Good Choice</div>
+            <div class="invalid-feedback">Please enter the Country</div>
+        </div>
+        <button type="submit" class="btn btn-brand btn-lg">Submit</button>
+    </form>
+</div>

@@ -1,0 +1,31 @@
+<% layout("layouts/boilerplate") %>
+<div class="form-panel">
+    <h2 class="page-title">Edit the details of your listing</h2>
+    <form action="/listings/<%= listing.id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+        <div>
+            <label class="form-label" for="listing-title">Title</label>
+            <input id="listing-title" type="text" name="listing[title]" value="<%= listing.title %>" class="form-control" required>
+        </div>
+        <div>
+            <label class="form-label" for="listing-description">Description</label>
+            <input id="listing-description" type="text" name="listing[description]" value="<%= listing.description %>" class="form-control" required>
+        </div>
+        <div>
+            <label class="form-label" for="listing-price">Price</label>
+            <input id="listing-price" type="number" name="listing[price]" value="<%= listing.price %>" class="form-control" required>
+        </div>
+        <div>
+            <label class="form-label" for="listing-location">Location</label>
+            <input id="listing-location" type="text" name="listing[location]" value="<%= listing.location %>" class="form-control" required>
+        </div>
+        <div>
+            <label class="form-label" for="listing-image">Image URL</label>
+            <input id="listing-image" type="text" name="listing[image]" value="<%= (listing.image && (listing.image.url || listing.image)) ? (listing.image.url || listing.image) : '' %>" class="form-control" placeholder="https://...">
+        </div>
+        <div>
+            <label class="form-label" for="listing-country">Country</label>
+            <input id="listing-country" type="text" name="listing[country]" value="<%= listing.country %>" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-brand btn-lg">Save changes</button>
+    </form>
+</div>

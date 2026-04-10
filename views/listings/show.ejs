@@ -1,0 +1,23 @@
+<% layout('layouts/boilerplate') %>
+<div class="details-panel">
+    <div class="listing-details">
+        <div>
+            <h2 class="page-title text-start mb-3">Here are the details of the listing</h2>
+            <ul class="details-list">
+                <li><strong>Property:</strong> <%= listing.title %></li>
+                <li><strong>Brief:</strong> <%= listing.description %></li>
+                <li><strong>Pricing:</strong> $<%= listing.price %>/night</li>
+                <li><strong>Venue:</strong> <%= listing.location %>, <%= listing.country %></li>
+            </ul>
+        </div>
+        <div>
+            <img src="<%= (listing.image && (listing.image.url || listing.image)) ? (listing.image.url || listing.image) : 'https://www.elegantthemes.com/blog/wp-content/uploads/2020/08/000-http-error-codes.png' %>" alt="<%= listing.title %>" class="details-image">
+        </div>
+    </div>
+    <div class="action-row">
+        <a href="/listings/<%= listing.id %>/edit" class="btn btn-brand">Edit Details</a>
+        <form action="/listings/<%= listing.id %>?_method=DELETE" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-outline-danger">Delete Listing</button>
+        </form>
+    </div>
+</div>

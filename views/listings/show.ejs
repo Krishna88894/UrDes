@@ -20,4 +20,24 @@
             <button type="submit" class="btn btn-outline-danger">Delete Listing</button>
         </form>
     </div>
+    <form action="/listings/<%= listing.id %>/reviews" method="POST">
+    <div>
+        <h3 class="page-title text-start mb-3">Reviews</h3>
+        <% if (listing.reviews.length > 0) { %>
+            <ul class="reviews-list">
+                <% listing.reviews.forEach(review => { %>
+                    <li class="review-item">
+                        <p><strong>Rating:</strong> <%= review.rating %>/5</p>
+                        <p><strong>Comment:</strong> <%= review.comment %></p>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>No reviews yet.</p>
+        <% } %>
+    </div>
+</form>
+    <form action="/listings/<%= listing.id%>/reviews" method="GET">
+        <button class="btn btn-brand">Add Review</button>
+    </form>
 </div>

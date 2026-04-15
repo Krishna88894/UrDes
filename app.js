@@ -13,6 +13,7 @@ const Review = require("./models/review.js");
 
 
 const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || "mongodb://127.0.0.1:27017/UrDes";
+const PORT = process.env.PORT || 8080;
 
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Rejection:", err.message);
@@ -117,7 +118,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
     const { statusCode = 500, message = "Something went wrong" } = err;
-    res.render("listings/error", { err, statusCode, message });
+    res.status(statusCode).render("listings/error", { err, statusCode, message });
 });
 
 async function main() {
@@ -126,15 +127,16 @@ async function main() {
         console.log("Connected to MongoDB");
     } catch (err) {
         console.error("Failed to connect to MongoDB:", err.message);
+        process.exit(1);
     }
 
-    const server = app.listen(8080, () => {
-        console.log("Server is running on port 8080");
+    const server = app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
     });
 
     server.on("error", (err) => {
         if (err.code === "EADDRINUSE") {
-            console.error("Port 8080 already in use");
+            console.error(`Port ${PORT} already in use`);
         } else {
             console.error("Server error:", err);
         }

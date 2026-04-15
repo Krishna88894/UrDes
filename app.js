@@ -11,6 +11,7 @@ const Review = require("./models/review.js");
 
 
 
+
 const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || "mongodb://127.0.0.1:27017/UrDes";
 
 process.on("unhandledRejection", (err) => {
@@ -48,17 +49,9 @@ app.post("/listings", wrapAsync(async (req, res) => {
 }));
 
 app.get("/listings/:id", wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw new ExpressError(404, "Page Not Found");
-    }
-
-    const listing = await Listing.findById(id);
-    if (!listing) {
-        throw new ExpressError(404, "Listing not found");
-    }
-
-    res.render("listings/show", { listing });
+    let { id } = req.params;
+    const listing = await Listing.findById(id).populate("reviews");
+    res.render("listings/show.ejs", { listing });
 }));
 
 app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
@@ -77,14 +70,7 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
 
 app.get("/listings/:id/reviews", wrapAsync(async (req, res) => {
     const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw new ExpressError(404, "Page Not Found");
-    }
     const listing = await Listing.findById(id);
-    if (!listing) {
-        throw new ExpressError(404, "Listing not found");
-    }
-
     res.render("listings/reviews", { listing });
 }));
 app.post("/listings/:id/reviews", wrapAsync(async (req, res) => {
@@ -96,13 +82,25 @@ app.post("/listings/:id/reviews", wrapAsync(async (req, res) => {
     if (!listing) {
         throw new ExpressError(404, "Listing not found");
     }
-    const review = new Review(req.body.review);
+    const review = new Review(req.body);
     await review.save();
     listing.reviews.push(review);
     await listing.save();
     res.redirect(`/listings/${id}`);
 }));
 
+app.delete("/listings/:id/reviews/:reviewid", wrapAsync(async(req, res) => {
+    const { id, reviewid } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(reviewid)) {
+        throw new ExpressError(404, "Page Not Found");
+    }
+    const listing = await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewid } });
+    if (!listing) {
+        throw new ExpressError(404, "Listing not found");
+    }
+    await Review.findByIdAndDelete(reviewid);
+    res.redirect(`/listings/${id}`);
+}));
 
 app.delete("/listings/:id", wrapAsync(async (req, res) => {
     const { id } = req.params;

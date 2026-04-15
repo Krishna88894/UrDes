@@ -20,23 +20,30 @@
             <button type="submit" class="btn btn-outline-danger">Delete Listing</button>
         </form>
     </div>
-    <form action="/listings/<%= listing.id %>/reviews" method="POST">
-    <div>
-        <h3 class="page-title text-start mb-3">Reviews</h3>
-        <% if (listing.reviews.length > 0) { %>
-            <ul class="reviews-list">
-                <% listing.reviews.forEach(review => { %>
-                    <li class="review-item">
-                        <p><strong>Rating:</strong> <%= review.rating %>/5</p>
-                        <p><strong>Comment:</strong> <%= review.comment %></p>
-                    </li>
-                <% }) %>
-            </ul>
-        <% } else { %>
-            <p>No reviews yet.</p>
-        <% } %>
-    </div>
-</form>
+<br />
+
+<!-- //Displaying reviews -->
+<div>
+<h4 class="page-title text-start mb-3">Reviews:</h4>
+<% if(listing.reviews.length > 0) { %>
+    <% for(review of listing.reviews) { %>
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title"><p><strong>Username:</strong> <%= review.name %></p></div>
+                <div class="card-text"><p><strong>Rating:</strong> <%= review.rating %>/5</p></div>
+                <div class="card-text"><p><strong>Comment:</strong> <%= review.comments %></p></div>
+                <div class="card-text"><p><strong>Posted:</strong> <%= review.createdAt ? new Date(review.createdAt).toLocaleDateString() : "N/A" %></p></div>
+                <form action="/listings/<%= listing.id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-outline-danger">Delete Review</button>
+                </form>
+        </div>
+        </div>
+    <% } %>
+<% } else { %>
+    No reviews yet
+    <% } %>
+</div>
+<br />
     <form action="/listings/<%= listing.id%>/reviews" method="GET">
         <button class="btn btn-brand">Add Review</button>
     </form>

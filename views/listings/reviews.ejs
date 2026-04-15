@@ -1,5 +1,5 @@
 <% layout('layouts/boilerplate') %>
-<form action="/listings/<%= listing.id %>/reviews" method="POST">
+<form action="/listings/<%= listing.id %>/reviews" method="POST" class="needs-validation" novalidate>
     <div class="form-group">
         <label for="rating">Rating:</label>
         <select name="rating" id="rating" class="form-control">
@@ -9,12 +9,16 @@
             <option value="4">4</option>
             <option value="5">5</option>
         </select>
-    </div>
-    <div class="form-group">
+        <div>
         <label for="comments">Comment:</label>
-        <textarea name="comments" id="comments" class="form-control"></textarea>
-    </div>
-  
+        <textarea name="comments" id="comments" class="form-control" placeholder="Add you valuable experienced reviews here..." required></textarea>
+        <div class="invalid-feedback">Feedback required.</div></div>
+        <br />
+        <div>
+        <label for="name">Your Name:</label>
+        <input type="text" name="name" id="name" class="form-control" placeholder="Enter your name please..." required>
+        <div class="invalid-feedback">Name required.</div></div>
+        <br />
         <button type="submit" class="btn btn-brand">Submit Review</button>
- 
+    </div> 
 </form>

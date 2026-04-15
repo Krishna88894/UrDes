@@ -23,5 +23,4 @@ const ListingSchema = new Schema({
     ref : "Review"
     }]
 });
-const Listing = mongoose.model("Listing", ListingSchema);
-module.exports = Listing;
+module.exports =mongoose.model("Listing", ListingSchema);

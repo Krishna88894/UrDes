@@ -9,6 +9,7 @@ const ReviewSchema = new Schema({
     createdAt : {
         type: Date,
         default : Date.now
-    }
+    }, 
+    name :String
 });
 module.exports = mongoose.model("Review", ReviewSchema);

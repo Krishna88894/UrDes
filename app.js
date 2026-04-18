@@ -7,7 +7,8 @@ const methodOverride = require("method-override");
 const ExpressError = require("./utils/ExpressError.js");
 const listing = require("./router/listing.js");
 const reviews = require("./router/review.js");
-const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || "mongodb://127.0.0.1:27017/UrDes";
+const isProduction = process.env.NODE_ENV === "production";
+const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || process.env.DB_URL || (!isProduction ? "mongodb://127.0.0.1:27017/UrDes" : null);
 const PORT = process.env.PORT || 8080;
 const session = require("express-session");
 const flash = require("connect-flash");
@@ -55,11 +56,21 @@ app.use((err, req, res, next) => {
 });
 
 async function main() {
+    if (!MONGO_URI) {
+        console.error("Missing MongoDB URI. Set MONGODB_URI (or MONGO_URI/DB_URL) in environment variables.");
+        process.exit(1);
+    }
+
     try {
-        await mongoose.connect(MONGO_URI);
+        await mongoose.connect(MONGO_URI, {
+            serverSelectionTimeoutMS: 10000,
+        });
         console.log("Connected to MongoDB");
     } catch (err) {
         console.error("Failed to connect to MongoDB:", err.message);
+        if (isProduction) {
+            console.error("On Render, verify MONGODB_URI, Atlas IP access, and credentials in the connection string.");
+        }
         process.exit(1);
     }
 

@@ -5,14 +5,15 @@ const ExpressError = require("../utils/ExpressError.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const Review = require("../models/review.js");
 const Listing = require("../models/listing.js");
+const {login} = require("../middleware.js");
 
-router.get("/", wrapAsync(async (req, res) => {
+router.get("/", login, wrapAsync(async (req, res) => {
     const { id } = req.params;
     const listing = await Listing.findById(id);
     res.render("listings/reviews", { listing });
 }));
 
-router.post("/", wrapAsync(async (req, res) => {
+router.post("/", login, wrapAsync(async (req, res) => {
     const { id } = req.params;  
     if (!mongoose.Types.ObjectId.isValid(id)) {
         throw new ExpressError(404, "Page Not Found");
@@ -29,7 +30,7 @@ router.post("/", wrapAsync(async (req, res) => {
     res.redirect(`/listings/${id}`);
 }));
 
-router.delete("/:reviewid", wrapAsync(async(req, res) => {
+router.delete("/:reviewid", login, wrapAsync(async(req, res) => {
     const { id, reviewid } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(reviewid)) {
         throw new ExpressError(404, "Page Not Found");

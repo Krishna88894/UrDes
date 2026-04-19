@@ -91,6 +91,16 @@ main.container,
     flex: 1 0 auto;
 }
 
+.flash-wrap {
+    width: min(100%, 640px);
+    margin: 0 auto 1rem;
+    text-align: center;
+}
+
+.flash-wrap .alert {
+    margin-bottom: 0;
+}
+
 footer {
     margin-top: auto;
 }

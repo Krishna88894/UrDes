@@ -1,0 +1,46 @@
+<% layout('layouts/boilerplate') %>
+<div class="form-panel">
+    <h2 class="page-title">Create your UrDes account</h2>
+    <form action="/signup" method="POST" class="needs-validation" novalidate>
+        <div>
+            <label class="form-label" for="signup-username">Username</label>
+            <input
+                id="signup-username"
+                type="text"
+                name="username"
+                class="form-control"
+                minlength="3"
+                maxlength="30"
+                required
+            >
+            <div class="invalid-feedback">Please choose a username (3-30 characters).</div>
+        </div>
+
+        <div>
+            <label class="form-label" for="signup-email">Email</label>
+            <input
+                id="signup-email"
+                type="email"
+                name="email"
+                class="form-control"
+                required
+            >
+            <div class="invalid-feedback">Please enter a valid email address.</div>
+        </div>
+
+        <div>
+            <label class="form-label" for="signup-password">Password</label>
+            <input
+                id="signup-password"
+                type="password"
+                name="password"
+                class="form-control"
+                minlength="6"
+                required
+            >
+            <div class="invalid-feedback">Password must be at least 6 characters long.</div>
+        </div>
+
+        <button type="submit" class="btn btn-brand btn-lg">Sign Up</button>
+    </form>
+</div>

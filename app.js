@@ -5,13 +5,17 @@ const path = require("path");
 const ejsmate = require("ejs-mate");
 const methodOverride = require("method-override");
 const ExpressError = require("./utils/ExpressError.js");
-const listing = require("./router/listing.js");
-const reviews = require("./router/review.js");
-const isProduction = process.env.NODE_ENV === "production";
-const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || process.env.DB_URL || (!isProduction ? "mongodb://127.0.0.1:27017/UrDes" : null);
+const listingR = require("./router/listing.js");
+const reviewsR = require("./router/review.js");
+const userR = require("./router/user.js");
+const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || "mongodb://127.0.0.1:27017/UrDes";
 const PORT = process.env.PORT || 8080;
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const User = require("./models/user.js");
 const session = require("express-session");
 const flash = require("connect-flash");
+
 
 app.engine("ejs", ejsmate);
 app.set("view engine", "ejs");
@@ -30,12 +34,20 @@ const sessionOptions = {
         httpOnly : true,
     },
 };
+
 app.use(session(sessionOptions));
 app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session()); //in a session multiple req, res undertakes by user, doesn't login again n again
+passport.use(new localStrategy(User.authenticate())); //makes user login/signup
+passport.serializeUser(User.serializeUser()); //stores user related info for a session
+passport.deserializeUser(User.deserializeUser()); //removes the stored info after session over
 
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currentUser = req.user;
     next();
 });
 
@@ -43,8 +55,9 @@ app.get("/", (req, res) => {
     res.render("listings/home");
 });
 
-app.use("/listings", listing);
-app.use("/listings/:id/reviews", reviews);
+app.use("/listings", listingR);
+app.use("/listings/:id/reviews", reviewsR);
+app.use("/", userR);
 
 app.use((req, res, next) => {
     next(new ExpressError(404, "Page Not Found"));
@@ -56,21 +69,11 @@ app.use((err, req, res, next) => {
 });
 
 async function main() {
-    if (!MONGO_URI) {
-        console.error("Missing MongoDB URI. Set MONGODB_URI (or MONGO_URI/DB_URL) in environment variables.");
-        process.exit(1);
-    }
-
     try {
-        await mongoose.connect(MONGO_URI, {
-            serverSelectionTimeoutMS: 10000,
-        });
+        await mongoose.connect(MONGO_URI);
         console.log("Connected to MongoDB");
     } catch (err) {
         console.error("Failed to connect to MongoDB:", err.message);
-        if (isProduction) {
-            console.error("On Render, verify MONGODB_URI, Atlas IP access, and credentials in the connection string.");
-        }
         process.exit(1);
     }
 

@@ -15,14 +15,12 @@
             <img src="<%= (listing.image && (listing.image.url || listing.image)) ? (listing.image.url || listing.image) : 'https://www.elegantthemes.com/blog/wp-content/uploads/2020/08/000-http-error-codes.png' %>" alt="<%= listing.title %>" class="details-image">
         </div>
     </div>
-    <% if(currentUser && currentUser._id.equals(listing.owner._id)) { %>
     <div class="action-row">
         <a href="/listings/<%= listing.id %>/edit" class="btn btn-brand">Edit Details</a>
         <form action="/listings/<%= listing.id %>?_method=DELETE" method="POST" class="d-inline">
             <button type="submit" class="btn btn-outline-danger">Delete Listing</button>
         </form>
     </div>
-<% } %>
 <br />
 
 <!-- //Displaying reviews -->

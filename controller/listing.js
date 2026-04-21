@@ -13,6 +13,10 @@ module.exports.new = (req, res) => {
 module.exports.newlisting = async (req, res) => {
     const newListing = new Listing(req.body.listing);
     newListing.owner = req.user._id;
+    if (req.file) {
+        const { filename, path: url } = req.file;
+        newListing.image = { url, filename };
+    }
     await newListing.save();
     req.flash("success", "Listing Creation Successful");
     res.redirect("/listings");

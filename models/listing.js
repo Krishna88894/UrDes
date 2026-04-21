@@ -11,11 +11,8 @@ const ListingSchema = new Schema({
     price : Number,
     location : String,
     image: {
-        url: {
-            type: String,
-            default: FALLBACK_IMAGE,
-            set: (v) => (v === "" ? FALLBACK_IMAGE : v),
-        },
+        url: String,
+        filename: String
     },
     country : String,
     reviews : [{

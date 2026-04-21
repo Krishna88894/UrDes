@@ -6,12 +6,15 @@ const ExpressError = require("../utils/ExpressError.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const {login, ownerL} = require("../middleware.js");
 const controllerL = require("../controller/listing.js");
+const multer = require("multer"); 
+const {storage} = require("../CC.js");
+const upload = multer({storage});
 
 router.get("/", wrapAsync(controllerL.index));
 
-router.get("/new", login, controllerL.new);
+router.post("/", login,upload.single("listing[image]"), wrapAsync(controllerL.newlisting));
 
-router.post("/", login, wrapAsync(controllerL.newlisting));
+router.get("/new", login, controllerL.new);
 
 router.get("/:id", wrapAsync(controllerL.showlisting));
 

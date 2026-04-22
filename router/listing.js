@@ -20,7 +20,7 @@ router.get("/:id", wrapAsync(controllerL.showlisting));
 
 router.get("/:id/edit", login,ownerL, wrapAsync(controllerL.editlistingshow));
 
-router.put("/:id", login, ownerL, wrapAsync(controllerL.editlisting));
+router.put("/:id", login, ownerL, upload.single("listing[image]"), wrapAsync(controllerL.editlisting));
 
 router.delete("/:id",login,ownerL, wrapAsync(controllerL.dltlisting));
 

@@ -314,6 +314,12 @@ footer {
     text-decoration: underline;
 }
 
+#map {
+    height: 400px;
+    width: 100%;
+    border-radius: 0.85rem;
+ }
+
 .socials {
     display: flex;
     justify-content: center;

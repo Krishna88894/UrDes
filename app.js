@@ -11,13 +11,18 @@ const ExpressError = require("./utils/ExpressError.js");
 const listingR = require("./router/listing.js");
 const reviewsR = require("./router/review.js");
 const userR = require("./router/user.js");
-const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI || "mongodb://127.0.0.1:27017/UrDes";
+const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
 const PORT = process.env.PORT || 8080;
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const User = require("./models/user.js");
 const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
+
+if (!MONGO_URI) {
+    throw new Error("Missing MongoDB connection string. Set MONGODB_URI in .env");
+}
 
 
 app.engine("ejs", ejsmate);
@@ -27,8 +32,19 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
+const store = MongoStore.create({
+    mongoUrl : MONGO_URI,
+    crypto : {
+        secret: process.env.SECRET,
+    },
+    touchAfter: 86400
+});
+store.on("error", (err) => {
+    console.error("Session store error:", err.message);
+});
+
 const sessionOptions = {
-    secret : "anonymous",
+    secret : process.env.SECRET,
     resave : false,
     saveUninitialized : true,
     cookie : {
@@ -36,7 +52,9 @@ const sessionOptions = {
         maxAge :  5 * 24 * 60 * 60 * 1500,
         httpOnly : true,
     },
+    store,
 };
+
 
 app.use(session(sessionOptions));
 app.use(flash());

@@ -1,7 +1,7 @@
 <% layout("layouts/boilerplate") %>
 <div class="form-panel">
     <h2 class="page-title">Edit the details of your listing</h2>
-    <form action="/listings/<%= listing.id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+    <form action="/listings/<%= listing.id %>?_method=PUT" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
         <div>
             <label class="form-label" for="listing-title">Title</label>
             <input id="listing-title" type="text" name="listing[title]" value="<%= listing.title %>" class="form-control" required>
@@ -18,9 +18,9 @@
             <label class="form-label" for="listing-location">Location</label>
             <input id="listing-location" type="text" name="listing[location]" value="<%= listing.location %>" class="form-control" required>
         </div>
-        <div>
-            <label class="form-label" for="listing-image">Image URL</label>
-            <input id="listing-image" type="text" name="listing[image]" value="<%= (listing.image && (listing.image.url || listing.image)) ? (listing.image.url || listing.image) : '' %>" class="form-control" placeholder="https://...">
+        <div>   
+            <label class="form-label" for="listing-image"> Upload Image</label>
+            <input id="listing-image" type="file" name="listing[image]"  class="form-control">
         </div>
         <div>
             <label class="form-label" for="listing-country">Country</label>

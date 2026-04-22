@@ -1,4 +1,8 @@
 <% layout('layouts/boilerplate') %>
+<script>
+    window.mapToken = "<%= process.env.MAP_ACCESS_TOKEN %>";
+    window.coordinates = "<%- JSON.stringify((listing.geometry && listing.geometry.coordinates) ? listing.geometry.coordinates : null) %>";
+</script>
 <div class="details-panel">
     <div class="listing-details">
         <div>
@@ -22,7 +26,7 @@
         </form>
     </div>
 <br />
-
+<hr />
 <!-- //Displaying reviews -->
 <div>
 <h4 class="page-title text-start mb-3">Reviews:</h4>
@@ -48,4 +52,11 @@
     <form action="/listings/<%= listing.id%>/reviews" method="GET">
         <button class="btn btn-brand">Add Review</button>
     </form>
+    <br />
+    <hr />
+    <div>
+        <h4>Where you'll be</h4>
+    <div id="map">
+    </div>
+</div>
 </div>

@@ -26,7 +26,7 @@ const ExpressError = require("../utils/ExpressError.js");
     }
     const review = new Review(req.body);
     review.author = req.user._id;
-    review.name = req.user.username;
+    review.name = review.name || req.user.username;
     await review.save();
     listing.reviews.push(review);
     await listing.save();
